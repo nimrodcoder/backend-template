@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import BaseUserManager
-
+from django.conf import settings
 # Create your models here.
 class UserProfileManager(BaseUserManager):
 
@@ -43,3 +43,31 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return str(self.name) + " " + str(self.email)
+
+
+class Blog(models.Model):
+    """ model for blogs """
+    text = models.CharField(max_length = 300)
+    likes = models.IntegerField(default = 0)
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Blogs"
+
+    def __str__(self):
+        return str(self.id) + " " + str(self.user) + " " + str(self.text)
+
+class Comment(models.Model):
+    """ model for comments """
+    text = models.CharField(max_length = 300)
+    likes = models.IntegerField(default = 0)
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE)
+    blog = models.ForeignKey(Blog, on_delete = models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Comments"
+
+    def __str__(self):
+        return str() + " " + str(self.user) + " " + str(self.blog) + " " + str(self.text)

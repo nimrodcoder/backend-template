@@ -29,3 +29,25 @@ class UserProfileSerializer(serializers.ModelSerializer):
             password = validated_data.pop("password")
 
         return super().update(instance, validated_data)
+
+class BlogSerializer(serializers.ModelSerializer):
+    """ serializes fields for blog model """
+    class Meta:
+        model = models.Blog
+        fields = ("id", "text", "likes")
+        extra_kwargs = {
+            'user' :{
+                'read_only' : True,
+            }
+        }
+
+class CommentSerializer(serializers.ModelSerializer):
+    """ serializes fields for comments """
+    class Meta:
+        model = models.Comment
+        fields = ("id", "text", "likes")
+        extra_kwargs = {
+            'user' :{
+                'read_only' : True,
+            }
+        }
